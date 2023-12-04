@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">NASAPictureoftheDay</string>
+    <string name="img_title">Image Title</string>
+    <string name="dateLabel">Picture Date</string>
+    <string name="single_day">Choose a Single Day</string>
+    <string name="description">Description</string>
+    <string name="date">YYYY-MM-DD</string>
+    <string name="multi_day">Choose Range for Multiple Days</string>
+    <string name="reqFail">Picture Request Failed</string>
+    <string name="success">Successfully Found a Picture</string>
 </resources>
