@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "459423937222",
+    "project_id": "maximusdb-98dd5",
+    "storage_bucket": "maximusdb-98dd5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:459423937222:android:a273d1e999d69774481dc7",
+        "android_client_info": {
+          "package_name": "com.example.nasapictureoftheday"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuNGoQgWoCqvYLDBkx_CcGJzKoQ0bg92Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:459423937222:android:f300f5a651fc95e1481dc7",
+        "android_client_info": {
+          "package_name": "com.lwong.firebaseauthfirestore"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuNGoQgWoCqvYLDBkx_CcGJzKoQ0bg92Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

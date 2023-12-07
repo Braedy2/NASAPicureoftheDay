@@ -1,12 +1,14 @@
 package com.example.nasapictureoftheday
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
-import android.text.format.DateFormat
 import android.view.View
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nasapictureoftheday.databinding.ActivityMainBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -18,8 +20,6 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Locale
-import javax.net.ssl.HttpsURLConnection
 
 //private var urlString: String = "https://api.nasa.gov/planetary/apod?api_key=etdCoqn82TVIIBC9kcnhJZoJjALrw9ZbwfMegtbT&date=$pictureDate"
 //private var urlString: String = "https://api.nasa.gov/planetary/apod?api_key=etdCoqn82TVIIBC9kcnhJZoJjALrw9ZbwfMegtbT"
@@ -35,6 +35,14 @@ class MainActivity : AppCompatActivity() {
         recyclerViewManager = LinearLayoutManager(applicationContext)
         binding.recyclerView.layoutManager = recyclerViewManager
         binding.recyclerView.setHasFixedSize(true)
+
+        binding.buttonLogout.setOnClickListener {
+            // logs out of Firebase
+            FirebaseAuth.getInstance().signOut()
+            Toast.makeText(this,R.string.logged_out, Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this,LoginActivity::class.java))
+            finish()
+        }
 
         //api call when app is started
         callAPI("initial");
