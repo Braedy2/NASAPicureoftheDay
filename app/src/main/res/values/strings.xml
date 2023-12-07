@@ -9,11 +9,31 @@
     <string name="reqFail">Picture Request Failed</string>
     <string name="success">Successfully Found a Picture</string>
     <string name="title_activity_login">LoginActivity</string>
+
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+
+    <!-- Strings for info page -->
+    <string name="infoButton">About</string>
+    <string name="aboutTitle">About NASA Picture of the Day!</string>
+    <string name="aboutDetails">
+        This app was created to allow uses to set their wallpapers to NASAs picture of the day!\n
+        You can set your wallpaper with the photo of the day!\n
+        You can set you wallpaper to a past pic of the day!\n
+    </string>
+    <string name="creators">Creators of the App</string>
+    <string name="creatorDetails">
+        This app was created by:\n
+        Maximus Slabon\n
+            AND\n
+        Braedon Watson\n
+    </string>
+    <string name="btnBackToHome">Back to Home Screen</string>
+    <string name="github">Check out the project on GitHub</string>
+    <string name="githublink">https://github.com/Braedy2/NASAPicureoftheDay</string>
 
     <!-- Strings for login/auth-->
     <string name="prompt_email">Email</string>

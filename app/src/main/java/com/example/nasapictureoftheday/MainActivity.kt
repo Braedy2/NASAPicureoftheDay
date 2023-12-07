@@ -44,6 +44,10 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
 
+        binding.btnInfo.setOnClickListener {
+            startActivity(Intent(this,InfoActivity::class.java))
+        }
+
         //api call when app is started
         callAPI("initial");
     }
