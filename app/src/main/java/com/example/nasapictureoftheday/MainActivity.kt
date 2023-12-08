@@ -1,11 +1,14 @@
 package com.example.nasapictureoftheday
 
+import android.app.WallpaperManager
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nasapictureoftheday.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -26,15 +29,26 @@ import java.util.Date
 
 class MainActivity : AppCompatActivity() {
     private lateinit var recyclerViewManager: RecyclerView.LayoutManager
+
+    private lateinit var viewModel:MyViewModel
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        recyclerViewManager = LinearLayoutManager(applicationContext)
-        binding.recyclerView.layoutManager = recyclerViewManager
-        binding.recyclerView.setHasFixedSize(true)
+        // viewmodel
+        viewModel = ViewModelProvider(this)[MyViewModel::class.java]
+
+        var apiObserver = Observer<APIFormat> {
+            newValue ->
+            binding.currentDay = newValue
+            val photoFrag: PhotoFragment? = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as PhotoFragment?
+            photoFrag?.change(newValue)
+        }
+
+        viewModel.currentDay.observe(this, apiObserver)
+
+
 
         binding.buttonLogout.setOnClickListener {
             // logs out of Firebase
@@ -63,7 +77,7 @@ class MainActivity : AppCompatActivity() {
         if (pictureDate == "initial") {
             date = dateFormat.format(Date())
         }
-        CoroutineScope(Dispatchers.IO/* + coroutineExceptionHandler*/).launch {
+        CoroutineScope(Dispatchers.Main/* + coroutineExceptionHandler*/).launch {
             //get current day to load todays picture
 
             val request = getPictureData(date)
@@ -106,8 +120,25 @@ class MainActivity : AppCompatActivity() {
         runOnUiThread {
             kotlin.run {
                 binding.textViewError.text = getString(R.string.success)
-                binding.recyclerView.adapter = RecyclerAdapter(request!!)
+                //binding.recyclerView.adapter = RecyclerAdapter(myList!!)
+                //Picasso.get().load(request.url).into(binding.imgTest)
+                viewModel.updateDay(request)
             }
+        }
+    }
+
+    fun setWallpaper(pic:String?) {
+        if(pic != null) {
+            // set da wallpaper
+            var wallpaperManager = WallpaperManager.getInstance(applicationContext)
+
+            //var istream = java.net.URL(pic).openStream()
+            //var bitmap = BitmapFactory.decodeStream(istream)
+
+            //val decoder = Base64.getDecoder()
+            //val bits = decoder.decode(pic)
+            //val image = BitmapFactory.decodeByteArray(bits, 0, bits.size)
+            //wallpaperManager.setBitmap(bitmap)
         }
     }
 
