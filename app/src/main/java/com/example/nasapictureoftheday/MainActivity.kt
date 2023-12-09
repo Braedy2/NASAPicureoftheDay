@@ -1,17 +1,21 @@
 package com.example.nasapictureoftheday
 
 import android.app.WallpaperManager
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
 import com.example.nasapictureoftheday.databinding.ActivityMainBinding
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.firestore
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -28,10 +32,12 @@ import java.util.Date
 //private var urlString: String = "https://api.nasa.gov/planetary/apod?api_key=etdCoqn82TVIIBC9kcnhJZoJjALrw9ZbwfMegtbT"
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var recyclerViewManager: RecyclerView.LayoutManager
-
     private lateinit var viewModel:MyViewModel
     private lateinit var binding: ActivityMainBinding
+
+    val db = Firebase.firestore
+    var currentDay:APIFormat? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -41,14 +47,12 @@ class MainActivity : AppCompatActivity() {
 
         var apiObserver = Observer<APIFormat> {
             newValue ->
-            binding.currentDay = newValue
+            currentDay = newValue
             val photoFrag: PhotoFragment? = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as PhotoFragment?
             photoFrag?.change(newValue)
         }
 
         viewModel.currentDay.observe(this, apiObserver)
-
-
 
         binding.buttonLogout.setOnClickListener {
             // logs out of Firebase
@@ -139,6 +143,22 @@ class MainActivity : AppCompatActivity() {
             //val bits = decoder.decode(pic)
             //val image = BitmapFactory.decodeByteArray(bits, 0, bits.size)
             //wallpaperManager.setBitmap(bitmap)
+        }
+    }
+
+    fun addToFaves(newDay: APIFormat?) {
+        if (newDay != null) {
+            var dayToAdd:APIFormat = newDay!!
+            db.collection("favouritePhotos").document(dayToAdd.date)
+                .set(dayToAdd, SetOptions.merge())
+                .addOnSuccessListener {
+                    Log.d(TAG, "DocumentSnapshot successfully written!")
+                    Toast.makeText(this,"Successfully added photo to favourites", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener {
+                    e -> Log.w(TAG, "Error writing document", e)
+                    Toast.makeText(this,"Error adding to favourites" + e, Toast.LENGTH_SHORT).show()
+                }
         }
     }
 

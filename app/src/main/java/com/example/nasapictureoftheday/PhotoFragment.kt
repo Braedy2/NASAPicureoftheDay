@@ -33,7 +33,9 @@ class PhotoFragment : Fragment() {
     var desc:TextView? = null
     var btn: Button? = null
 
-    var photoUrl:String? = null
+    var btnFav:Button? = null
+
+    var day:APIFormat? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,21 +58,27 @@ class PhotoFragment : Fragment() {
         date = view.findViewById(R.id.textViewDate)
         author = view.findViewById(R.id.textViewAuthor)
         desc = view.findViewById(R.id.textViewDescription)
+
         btn = view.findViewById(R.id.button)
+        btnFav = view.findViewById(R.id.btnAddToFav)
+
         btn!!.setOnClickListener {
             callSetWallpaper()
+        }
+        btnFav!!.setOnClickListener {
+            (activity as MainActivity).addToFaves(day)
         }
         return view
     }
 
     fun callSetWallpaper() {
-        (activity as MainActivity).setWallpaper(photoUrl)
+        (activity as MainActivity).setWallpaper(day?.url)
     }
 
     fun change(newDay:APIFormat) {
         if (newDay.url != "") {
             Picasso.get().load(newDay.url).into(photo!!)
-            photoUrl = newDay.url
+            day = newDay
         }
         title!!.text = newDay.title
         dateLabel!!.text = newDay.date
