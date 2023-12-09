@@ -66,6 +66,10 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this,InfoActivity::class.java))
         }
 
+        binding.btnFav.setOnClickListener{
+            startActivity(Intent(this,ViewFavsActivity::class.java))
+        }
+
         //api call when app is started
         callAPI("initial");
     }
