@@ -6,6 +6,7 @@ import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import com.example.nasapictureoftheday.databinding.ActivityLoginBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -18,8 +19,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         // Initialize Firebase Auth
         auth = Firebase.auth
 
