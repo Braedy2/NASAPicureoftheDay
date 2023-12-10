@@ -54,7 +54,6 @@ class PhotoFragment : Fragment() {
 
         title = view.findViewById(R.id.ImageTitleText)
         photo = view.findViewById(R.id.imageViewPicture)
-        //dateLabel = view.findViewById(R.id.textViewDateLabel)
         date = view.findViewById(R.id.textViewDate)
         author = view.findViewById(R.id.textViewAuthor)
         desc = view.findViewById(R.id.textViewDescription)
