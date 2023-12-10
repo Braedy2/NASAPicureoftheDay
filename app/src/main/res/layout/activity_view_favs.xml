@@ -26,6 +26,7 @@
             android:id="@+id/recyclerView"
             android:layout_width="409dp"
             android:layout_height="681dp"
+            android:scrollbars="vertical"
             app:layout_constraintBottom_toTopOf="@+id/btnHome"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

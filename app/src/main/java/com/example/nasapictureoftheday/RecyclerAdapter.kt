@@ -33,7 +33,7 @@ class RecyclerAdapter(private val dataSet: MutableList<APIFormat>) :
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.fragment_photo, viewGroup, false)
         val lp = view.layoutParams
-        lp.height = 512
+        lp.height = 1200
         view.layoutParams = lp
 
         return ViewHolder(view)
