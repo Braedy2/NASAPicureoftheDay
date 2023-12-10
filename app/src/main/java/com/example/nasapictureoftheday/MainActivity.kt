@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
 import android.view.View
@@ -26,11 +25,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Date
+
 
 //private var urlString: String = "https://api.nasa.gov/planetary/apod?api_key=etdCoqn82TVIIBC9kcnhJZoJjALrw9ZbwfMegtbT&date=$pictureDate"
 //private var urlString: String = "https://api.nasa.gov/planetary/apod?api_key=etdCoqn82TVIIBC9kcnhJZoJjALrw9ZbwfMegtbT"
@@ -132,41 +133,33 @@ class MainActivity : AppCompatActivity() {
         runOnUiThread {
             kotlin.run {
                 binding.textViewError.text = ""
-                //binding.recyclerView.adapter = RecyclerAdapter(myList!!)
-                //Picasso.get().load(request.url).into(binding.imgTest)
                 viewModel.updateDay(request)
             }
         }
     }
 
-    fun setWallpaper(pic: String) {
-        val bitmap = decodeBase64ToBitmap(pic)
-
-        setDeviceWallpaper(bitmap)
-        /*if(pic != null) {
-            // set da wallpaper
-            var wallpaperManager = WallpaperManager.getInstance(applicationContext)
-
-            //var istream = java.net.URL(pic).openStream()
-            //var bitmap = BitmapFactory.decodeStream(istream)
-
-            //val decoder = Base64.getDecoder()
-            //val bits = decoder.decode(pic)
-            //val image = BitmapFactory.decodeByteArray(bits, 0, bits.size)
-            //wallpaperManager.setBitmap(bitmap)
-        }*/
+    private suspend fun getStreamFromURL(url:String): InputStream {
+        val defer = CoroutineScope(Dispatchers.IO).async {
+            return@async URL(url).openStream()
+        }
+        return defer.await()
     }
 
-    private fun setDeviceWallpaper(bitmap: Bitmap?) {
-        try {
-            val wallpaperManager = WallpaperManager.getInstance(applicationContext)
-            wallpaperManager.setBitmap(bitmap)
+    fun setWallpaper(pic: String) {
+        if(pic != null) {
+            var wallpaperManager = WallpaperManager.getInstance(applicationContext)
 
-            Toast.makeText(this, "Wallpaper Set Successfully", Toast.LENGTH_SHORT).show()
-        }
-        catch (e: Exception) {
-            e.printStackTrace()
-            Toast.makeText(this, "Failed to Set Wallpaper", Toast.LENGTH_SHORT).show()
+            CoroutineScope(Dispatchers.IO/* + coroutineExceptionHandler*/).launch {
+                val request = getStreamFromURL(pic)
+                if (request != null) {
+                    try {
+                        wallpaperManager.setStream(request)
+                        //Toast.makeText(applicationContext,"Successfully set wallpaper", Toast.LENGTH_SHORT).show()
+                    } catch (e:Exception) {
+                        //Toast.makeText(applicationContext,"Error setting wallpaper" + e.toString(), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
     }
 
@@ -186,11 +179,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun onSetWallpaper(view: View) {
-        val bitmap: Bitmap? = decodeBase64ToBitmap(R.id.imageViewPicture.toString())
-
-        setDeviceWallpaper(bitmap)
-    }
     private fun decodeBase64ToBitmap(base64String: String): Bitmap? {
         var bitmap: Bitmap? = null
         try {

@@ -12,7 +12,7 @@
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onSetWallpaper"
+        android:onClick="callSetWallpaper"
         android:text="@string/btnSetWallaper"
         app:layout_constraintBottom_toTopOf="@+id/textViewDescription"
         app:layout_constraintEnd_toEndOf="parent"
