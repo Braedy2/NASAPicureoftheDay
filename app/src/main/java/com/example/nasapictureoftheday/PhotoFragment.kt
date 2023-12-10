@@ -27,7 +27,7 @@ class PhotoFragment : Fragment() {
 
     var title:TextView? = null
     var photo:ImageView? = null
-    var dateLabel:TextView? = null
+    //var dateLabel:TextView? = null
     var date:TextView? = null
     var author:TextView? = null
     var desc:TextView? = null
@@ -35,7 +35,7 @@ class PhotoFragment : Fragment() {
 
     var btnFav:Button? = null
 
-    var day:APIFormat? = null
+    var day:APIFormat = APIFormat("", "", "", "", "")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +54,7 @@ class PhotoFragment : Fragment() {
 
         title = view.findViewById(R.id.ImageTitleText)
         photo = view.findViewById(R.id.imageViewPicture)
-        dateLabel = view.findViewById(R.id.textViewDateLabel)
+        //dateLabel = view.findViewById(R.id.textViewDateLabel)
         date = view.findViewById(R.id.textViewDate)
         author = view.findViewById(R.id.textViewAuthor)
         desc = view.findViewById(R.id.textViewDescription)
@@ -72,7 +72,7 @@ class PhotoFragment : Fragment() {
     }
 
     fun callSetWallpaper() {
-        (activity as MainActivity).setWallpaper(day?.url)
+        (activity as MainActivity).setWallpaper(day.url)
     }
 
     fun change(newDay:APIFormat) {
@@ -81,11 +81,15 @@ class PhotoFragment : Fragment() {
             day = newDay
         }
         title!!.text = newDay.title
-        dateLabel!!.text = newDay.date
+        //dateLabel!!.text = newDay.date
         date!!.text = newDay.date
         author!!.text = newDay.copyright
-        desc!!.text = newDay.explanation
-
+        if (newDay.explanation.length > 450) {
+            desc!!.text = newDay.explanation.substring(0, 450) + ". . ."
+        }
+        else {
+            desc!!.text = newDay.explanation
+        }
     }
 
     companion object {

@@ -17,7 +17,7 @@
         <Button
             android:id="@+id/buttonLogout"
             android:layout_width="130dp"
-            android:layout_height="70dp"
+            android:layout_height="50dp"
             android:text="@string/logout"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -39,7 +39,7 @@
         <Button
             android:id="@+id/btnInfo"
             android:layout_width="130dp"
-            android:layout_height="70dp"
+            android:layout_height="50dp"
             android:text="@string/infoButton"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/textViewError"
@@ -63,7 +63,7 @@
         <Button
             android:id="@+id/btnFav"
             android:layout_width="152dp"
-            android:layout_height="70dp"
+            android:layout_height="50dp"
             android:text="@string/btnFavPhotos"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/buttonLogout"

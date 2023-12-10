@@ -41,7 +41,14 @@ class RecyclerAdapter(private val dataSet: MutableList<APIFormat>) :
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         Log.d("Fragment", dataSet[position].date)
         viewHolder.textViewDate.text = dataSet[position].date
-        viewHolder.textViewExplanation.text = dataSet[position].explanation
+        //println("EXPLANATION")
+        //println(dataSet[position].explanation.substring(0, 100))
+        if (dataSet[position].explanation.length > 100) {
+            viewHolder.textViewExplanation.text = dataSet[position].explanation.substring(0, 100)
+        }
+        else {
+            viewHolder.textViewExplanation.text = dataSet[position].explanation
+        }
         viewHolder.textViewAuthor.text = dataSet[position].copyright
         Picasso.get().load(dataSet[position].url).into(viewHolder.imageViewPicture)
     }
