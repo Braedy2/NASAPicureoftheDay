@@ -13,6 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class ViewFavsActivity : AppCompatActivity() {
     private lateinit var recyclerViewManager: RecyclerView.LayoutManager
@@ -33,13 +34,13 @@ class ViewFavsActivity : AppCompatActivity() {
         binding.recyclerView.setHasFixedSize(true)
 
         // get the favourites
-
-
         CoroutineScope(Dispatchers.Main).launch {
+            Log.d("ViewFavsActivity", "pulling favourite photos")
             val request = getFavourites()
             if (request != null) {
-                updateUI(request)
                 myFavPhotos = request
+                Log.d("ViewFavsActivity", "updating fragment list")
+                updateUI(request)
             }
         }
     }
@@ -47,32 +48,21 @@ class ViewFavsActivity : AppCompatActivity() {
     private suspend fun getFavourites(): MutableList<APIFormat> {
         var tempList = mutableListOf<APIFormat>(APIFormat("", "", "","",""))
         tempList.clear()
-
         val defer = CoroutineScope(Dispatchers.IO).async {
-            var gotData = false
-            db.collection("favouritePhotos")
-                .get()
-                .addOnSuccessListener { result ->
-                    for (document in result) {
-                        val newDay:APIFormat = APIFormat(
-                            document.data.get("copyright")!!.toString(),
-                            document.data.get("date")!!.toString(),
-                            document.data.get("title")!!.toString(),
-                            document.data.get("url")!!.toString(),
-                            document.data.get("explanation")!!.toString(),
-                        )
-                        tempList.add(newDay)
+            val queryReturn = db.collection("favouritePhotos")
+                .get().await()
 
-                        Log.d("Firestore", document.id)
-                        Log.d("Firestore", document.data.get("date")!!.toString())
-                        Log.d("Firestore", document.data.get("title")!!.toString())
-                        Log.d("Firestore", document.data.get("url")!!.toString())
-                    }
-                    Log.w("Firestore", "Got Data")
-                }
-                .addOnFailureListener { exception ->
-                    Log.w("Firestore", "Error getting documents.", exception)
-                }
+            for (document in queryReturn.documents) {
+                val newDay:APIFormat = APIFormat(
+                    document.get("copyright")!!.toString(),
+                    document.get("date")!!.toString(),
+                    document.get("title")!!.toString(),
+                    document.get("url")!!.toString(),
+                    document.get("explanation")!!.toString(),
+                )
+                Log.d("Firestore", document.toString())
+                tempList.add(newDay)
+            }
             return@async tempList
         }
         return defer.await()
