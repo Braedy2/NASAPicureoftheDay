@@ -35,11 +35,9 @@ class ViewFavsActivity : AppCompatActivity() {
 
         // get the favourites
         CoroutineScope(Dispatchers.Main).launch {
-            Log.d("ViewFavsActivity", "pulling favourite photos")
             val request = getFavourites()
             if (request != null) {
                 myFavPhotos = request
-                Log.d("ViewFavsActivity", "updating fragment list")
                 updateUI(request)
             }
         }

@@ -16,11 +16,13 @@ class RecyclerAdapter(private val dataSet: MutableList<APIFormat>) :
         var textViewExplanation: TextView
         var textViewAuthor: TextView
         var imageViewPicture: ImageView
+        var textViewTitle: TextView
         init {
             textViewDate = view.findViewById(R.id.textViewDate)
             textViewExplanation = view.findViewById(R.id.textViewDescription)
             textViewAuthor = view.findViewById(R.id.textViewAuthor)
             imageViewPicture = view.findViewById(R.id.imageViewPicture)
+            textViewTitle = view.findViewById(R.id.ImageTitleText)
         }
     }
 
@@ -39,10 +41,13 @@ class RecyclerAdapter(private val dataSet: MutableList<APIFormat>) :
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        Log.d("Fragment", dataSet[position].date)
+        Log.d("Fragment", "title " + dataSet[position].title)
+        Log.d("Fragment", "explaination " + dataSet[position].explanation)
+        Log.d("Fragment", "url " + dataSet[position].url)
+        Log.d("Fragment", "date " + dataSet[position].date)
+
+        viewHolder.textViewTitle.text = dataSet[position].title
         viewHolder.textViewDate.text = dataSet[position].date
-        //println("EXPLANATION")
-        //println(dataSet[position].explanation.substring(0, 100))
         if (dataSet[position].explanation.length > 100) {
             viewHolder.textViewExplanation.text = dataSet[position].explanation.substring(0, 100)
         }
